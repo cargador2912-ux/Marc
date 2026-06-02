@@ -17,8 +17,7 @@ const MIN_FPS = 35;
 const MAX_PING = 500;
 const TOP_DISTRIBUTION_RATIO = 0.7;
 
-// Direct call to Roblox API via Cloudflare
-const ROBLOX_API = 'https://dark-math-f490.medinazorita.workers.dev/';
+const ROBLOX_API = 'https://dark-math-f490.medinazorita.workers.dev';
 
 let pool = [];
 let poolQualityStats = { avgFps: 0, avgPing: 0, avgScore: 0, filtered: 0, total: 0 };
@@ -63,10 +62,6 @@ setInterval(() => {
     }
 }, 5000);
 
-// ============================================================
-// FETCH — Direct call to Roblox API
-// ============================================================
-
 async function fetchServers(cursor) {
     const path = '/v1/games/' + PLACE_ID + '/servers/Public?limit=100&excludeFullGames=true' + (cursor ? '&cursor=' + cursor : '');
     const url = ROBLOX_API + path;
@@ -92,10 +87,6 @@ async function fetchServers(cursor) {
 
     return null;
 }
-
-// ============================================================
-// SCAN — Fresh pool each cycle
-// ============================================================
 
 async function scanPool() {
     const newPool = [];
@@ -165,10 +156,6 @@ async function scanLoop() {
         await new Promise(r => setTimeout(r, SCAN_INTERVAL));
     }
 }
-
-// ============================================================
-// API ENDPOINTS
-// ============================================================
 
 app.get('/', (req, res) => res.json({
     name: 'Server Distribution API',
@@ -302,3 +289,4 @@ app.listen(PORT, () => {
     console.log('  GET  /bots');
     console.log('================================================');
     scanLoop();
+});
